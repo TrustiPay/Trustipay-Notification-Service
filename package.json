@@ -1,0 +1,37 @@
+{
+  "name": "trustipay-sms-notification-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/server.js",
+    "start:dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@fastify/env": "^6.0.0",
+    "@fastify/rate-limit": "^10.3.0",
+    "better-sqlite3": "^12.9.0",
+    "dotenv": "^17.4.2",
+    "fastify": "^5.8.5",
+    "jsonwebtoken": "^9.0.3",
+    "mustache": "^4.2.0",
+    "pino": "^10.3.1",
+    "zod": "^4.4.2"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/mustache": "^4.2.6",
+    "@types/node": "^25.6.0",
+    "pino-pretty": "^13.1.3",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.5"
+  }
+}
