@@ -1,5 +1,12 @@
 import Fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { env } from './config/env';
+import { MockSmsProvider } from './modules/providers/mock.provider';
+import { TextlkSmsProvider } from './modules/providers/textlk.provider';
+import { SmsService } from './modules/sms/sms.service';
+import { OtpService } from './modules/otp/otp.service';
+import { createSmsRoutes } from './modules/sms/sms.routes';
+import { createOtpRoutes } from './modules/otp/otp.routes';
+import { templateRoutes } from './modules/templates/template.routes';
 
 export async function buildApp(): Promise<FastifyInstance> {
   const app = Fastify({
@@ -17,15 +24,21 @@ export async function buildApp(): Promise<FastifyInstance> {
     },
   });
 
-  // Basic Health Endpoints
-  app.get('/health/live', async (request: FastifyRequest, reply: FastifyReply) => {
+  const provider = env.SMS_PROVIDER_MODE === 'textlk' ? new TextlkSmsProvider() : new MockSmsProvider();
+  const smsService = new SmsService(provider);
+  const otpService = new OtpService(smsService);
+
+  app.get('/health/live', async (_request: FastifyRequest, reply: FastifyReply) => {
     return reply.status(200).send({ status: 'ok', timestamp: new Date().toISOString() });
   });
 
-  app.get('/health/ready', async (request: FastifyRequest, reply: FastifyReply) => {
-    // We will add DB and Provider checks here later
+  app.get('/health/ready', async (_request: FastifyRequest, reply: FastifyReply) => {
     return reply.status(200).send({ status: 'ready', timestamp: new Date().toISOString() });
   });
+
+  await app.register(templateRoutes);
+  await app.register(createSmsRoutes(smsService));
+  await app.register(createOtpRoutes(otpService));
 
   return app;
 }

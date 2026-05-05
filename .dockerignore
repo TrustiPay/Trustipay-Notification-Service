@@ -6,6 +6,7 @@ dist
 *.db
 *.log
 README.md
+API_GUIDE.md
 test/
 test.db
 coverage/

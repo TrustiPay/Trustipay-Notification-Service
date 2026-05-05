@@ -33,10 +33,6 @@ const envSchema = z.object({
   OTP_TEST_CODE: z.string().optional(),
   OTP_RETURN_CODE_IN_NON_PROD: z.coerce.boolean().default(true),
 
-  INTERNAL_SERVICE_JWT_ISSUER: z.string().default('trustipay-gateway'),
-  INTERNAL_SERVICE_JWT_AUDIENCE: z.string().default('trustipay-sms-service'),
-  INTERNAL_SERVICE_JWKS_URL: z.string().optional(),
-
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
   PII_LOGGING_ENABLED: z.coerce.boolean().default(false)
 });

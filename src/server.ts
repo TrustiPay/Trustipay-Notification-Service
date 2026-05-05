@@ -1,13 +1,18 @@
 import { buildApp } from './app';
 import { env } from './config/env';
+import { runMigrations } from './db/migrate';
+import { runSeeds } from './db/seed_templates';
 
 async function start() {
   try {
+    runMigrations();
+    runSeeds();
+
     const app = await buildApp();
-    
+
     await app.listen({ port: env.PORT, host: '0.0.0.0' });
     app.log.info(`Server listening on port ${env.PORT}`);
-    
+
     const gracefulShutdown = async (signal: string) => {
       app.log.info(`Received ${signal}. Shutting down gracefully...`);
       await app.close();
@@ -16,7 +21,6 @@ async function start() {
 
     process.on('SIGINT', () => gracefulShutdown('SIGINT'));
     process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
-
   } catch (err) {
     console.error(err);
     process.exit(1);

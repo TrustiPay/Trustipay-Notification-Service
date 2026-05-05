@@ -1,5 +1,3 @@
-import crypto from 'crypto';
-
 export function normalizePhoneNumber(phone: string): string {
   // Remove spaces, hyphens, parentheses
   let normalized = phone.replace(/[\s\-\(\)]/g, '');
@@ -28,8 +26,4 @@ export function maskPhoneNumber(phone: string): string {
     return phone.substring(0, 4) + '****' + phone.substring(8);
   }
   return '****';
-}
-
-export function hashPhoneNumber(phone: string, secret: string): string {
-  return crypto.createHmac('sha256', secret).update(phone).digest('hex');
 }
