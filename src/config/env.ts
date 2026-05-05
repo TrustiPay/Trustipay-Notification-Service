@@ -5,7 +5,7 @@ dotenv.config();
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-  PORT: z.coerce.number().default(4210),
+  PORT: z.coerce.number().default(3000),
   SERVICE_NAME: z.string().default('trustipay-sms-notification-service'),
   
   DATABASE_URL: z.string().default('file:./data/trustipay_sms.sqlite'),

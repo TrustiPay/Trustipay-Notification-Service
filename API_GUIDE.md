@@ -20,7 +20,7 @@ npm run build && npm start
 
 Migrations and seed templates run automatically on every startup — no manual step needed.
 
-Default port: **4210** (controlled by `PORT` env var).
+Default port: **3000** (controlled by `PORT` env var).
 
 ---
 
@@ -35,7 +35,7 @@ docker build -t trustipay-sms-notification-service .
 # Run with a persistent data volume
 docker run -d \
   --name sms-service \
-  -p 4210:4210 \
+  -p 3000:3000 \
   -v sms-data:/app/data \
   --env-file .env \
   trustipay-sms-notification-service
@@ -44,7 +44,7 @@ docker run -d \
 The container:
 - Runs migrations and seeds templates on startup automatically
 - Stores the SQLite database in `/app/data` — mount a named volume so data survives restarts
-- Exposes port **4210**
+- Exposes port **3000**
 - Has a built-in healthcheck on `GET /health/live` (30 s interval, 3 retries)
 
 ### Environment file for production
@@ -53,7 +53,7 @@ Create a `.env` on the host (never baked into the image):
 
 ```env
 NODE_ENV=production
-PORT=4210
+PORT=3000
 
 DATABASE_URL=file:./data/trustipay_sms.sqlite
 
@@ -83,7 +83,7 @@ server {
     server_name notify.trustipay.online;
 
     location / {
-        proxy_pass http://127.0.0.1:4210;
+        proxy_pass http://127.0.0.1:3000;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
     }
@@ -97,7 +97,7 @@ server {
 | Variable | Default | Description |
 |---|---|---|
 | `NODE_ENV` | `development` | `development`, `production`, or `test` |
-| `PORT` | `4210` | HTTP port |
+| `PORT` | `3000` | HTTP port |
 | `DATABASE_URL` | `file:./data/trustipay_sms.sqlite` | SQLite file path |
 | `SQLITE_WAL_ENABLED` | `true` | Enable WAL mode for concurrent reads |
 | `SQLITE_BUSY_TIMEOUT_MS` | `5000` | Lock wait timeout |
